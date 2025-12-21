@@ -136,6 +136,73 @@ Fichier : `C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global O
 
 **Note** : Varie selon la version de Call of Duty. Cherchez "Crosshair", "Reticle" ou "Opacité du viseur".
 
+### Fortnite
+
+**Désactiver le viseur natif** :
+
+1. Lancez **Fortnite**
+2. Ouvrez **Paramètres** (ESC)
+3. Allez dans **HUD et Interface Utilisateur**
+4. Désactivez **"Viseur personnalisé"** ou **"Afficher le viseur"**
+
+**Alternative avec opacité** :
+
+1. Dans les paramètres **HUD**
+2. Cherchez **"Opacité du viseur"** ou **"Crosshair Opacity"**
+3. Mettez à **0%**
+
+#### 🎯 Guide Complet Fortnite
+
+##### Configuration Initiale
+
+1. **Lancez l'application** : `RUN_APP.bat`
+2. **Chargez un crosshair** : Cliquez sur "📂 Charger Crosshair"
+3. **Désactivez le viseur Fortnite** : Suivez les étapes ci-dessus
+4. **Lancez Fortnite** : L'overlay reste visible au-dessus du jeu
+
+##### 🎲 Roulette en Jeu
+
+La fonctionnalité signature : **changez de crosshair pendant vos parties** !
+
+**Configurer votre touche** :
+
+1. Cliquez sur "🎹 Touche globale: F1"
+2. Cliquez "🎯 Capturer une touche"
+3. Appuyez sur **F2**, **F3**, **F4** ou un **bouton de souris latéral**
+4. **Évitez F1** (menu Fortnite) et **Tab/Esc**
+
+**En partie** :
+
+- Appuyez sur votre touche → Animation 6 secondes → Nouveau crosshair aléatoire ! 🎰
+
+##### 🏆 Crosshairs Recommandés
+
+**Pour le gameplay compétitif** :
+
+- **Minimalist Dot** : Point ultra-précis
+- **Laser Dot** : Point rouge classique
+- **Classic (small)** : Longueur 15-30px, Épaisseur 2-4px
+- **Couleurs** : Vert/Cyan (bonne visibilité)
+
+**Pour le fun** :
+
+- **Rainbow** : Arc-en-ciel multicolore 🌈
+- **Pulsing Circle** : Animation pulsante
+- **Star (fullscreen)** : Étoile géante ⭐
+
+**Mode "Roulette Challenge"** :
+
+- Changez de crosshair **à chaque élimination** !
+- Testez votre adaptabilité avec des crosshairs aléatoires
+
+##### ⚡ Astuces
+
+- ✅ **Click-through** : Vos clics passent à travers l'overlay
+- ✅ **Impact FPS** : Quasi nul (overlay très léger)
+- ✅ **Compatible** : Mode plein écran et fenêtré
+- 🎨 **Couleurs selon map** : Rouge/Magenta sur environnements verts, Vert/Cyan ailleurs
+- 📐 **Centrage** : Glissez-déposez l'overlay pour ajuster la position
+
 ## 🎨 Styles de Crosshair
 
 - **Classic/Cross** : Croix avec gap

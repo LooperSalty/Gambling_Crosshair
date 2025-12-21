@@ -137,6 +137,73 @@ File location: `C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Glo
 
 **Note**: Varies by Call of Duty version. Look for "Crosshair", "Reticle" or "Sight Opacity".
 
+### Fortnite
+
+**Disable native crosshair**:
+
+1. Launch **Fortnite**
+2. Open **Settings** (ESC)
+3. Go to **HUD and User Interface**
+4. Disable **"Custom Crosshair"** or **"Show Crosshair"**
+
+**Alternative with opacity**:
+
+1. In **HUD** settings
+2. Look for **"Crosshair Opacity"**
+3. Set to **0%**
+
+#### 🎯 Complete Fortnite Guide
+
+##### Initial Setup
+
+1. **Launch the app**: `RUN_APP.bat`
+2. **Load a crosshair**: Click "📂 Load Crosshair"
+3. **Disable Fortnite crosshair**: Follow steps above
+4. **Launch Fortnite**: Overlay stays visible on top of the game
+
+##### 🎲 In-Game Roulette
+
+The signature feature: **change crosshair during your matches**!
+
+**Configure your key**:
+
+1. Click "🎹 Global Key: F1"
+2. Click "🎯 Capture a key"
+3. Press **F2**, **F3**, **F4** or a **mouse side button**
+4. **Avoid F1** (Fortnite menu) and **Tab/Esc**
+
+**During match**:
+
+- Press your key → 6-second animation → Random new crosshair! 🎰
+
+##### 🏆 Recommended Crosshairs
+
+**For competitive gameplay**:
+
+- **Minimalist Dot**: Ultra-precise point
+- **Laser Dot**: Classic red dot
+- **Classic (small)**: Length 15-30px, Thickness 2-4px
+- **Colors**: Green/Cyan (good visibility)
+
+**For fun**:
+
+- **Rainbow**: Multicolor rainbow 🌈
+- **Pulsing Circle**: Pulsing animation
+- **Star (fullscreen)**: Giant star ⭐
+
+**"Roulette Challenge" Mode**:
+
+- Change crosshair **after each elimination**!
+- Test your adaptability with random crosshairs
+
+##### ⚡ Tips
+
+- ✅ **Click-through**: Your clicks pass through the overlay
+- ✅ **FPS impact**: Nearly none (very light overlay)
+- ✅ **Compatible**: Full screen and windowed mode
+- 🎨 **Colors by map**: Red/Magenta on green environments, Green/Cyan elsewhere
+- 📐 **Centering**: Drag-and-drop overlay to adjust position
+
 ## 🎨 Crosshair Styles
 
 - **Classic/Cross** : Cross with gap
