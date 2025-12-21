@@ -1,1 +1,3 @@
+POur créez un bind pour activer/désactiver rapidement :
+
 bind "p" "toggle cl_crosshairalpha 0 255"
