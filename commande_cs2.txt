@@ -1,0 +1,1 @@
+bind "p" "toggle cl_crosshairalpha 0 255"
