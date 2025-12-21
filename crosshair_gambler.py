@@ -791,10 +791,10 @@ class HotkeyConfigDialog:
         btn_frame = tk.Frame(self.dialog, bg="#1a1a1a")
         btn_frame.pack(pady=20)
         
-        save_btn = tk.Button(btn_frame, text="✅ Sauvegarder", command=self.save_key,
+        self.save_btn = tk.Button(btn_frame, text="✅ Sauvegarder", command=self.save_key,
                             bg="#00ff00", fg="#000000", font=("Arial", 11, "bold"),
                             width=12, relief="flat", cursor="hand2")
-        save_btn.pack(side="left", padx=10)
+        self.save_btn.pack(side="left", padx=10)
         
         cancel_btn = tk.Button(btn_frame, text="❌ Annuler", command=self.dialog.destroy,
                               bg="#ff0000", fg="#ffffff", font=("Arial", 11, "bold"),
@@ -857,6 +857,16 @@ class HotkeyConfigDialog:
                 self.mouse_listener.stop()
             except:
                 pass
+        
+        # Auto-save the captured key immediately
+        self.callback(self.selected_key)
+        
+        # Highlight the save button and update text to indicate saved
+        if hasattr(self, 'save_btn'):
+            self.save_btn.config(text="✅ Sauvegardé ! Fermer", bg="#00aa00")
+        
+        # Show confirmation message
+        messagebox.showinfo("Touche Sauvegardée", f"La touche '{self.selected_key}' a été sauvegardée automatiquement !\n\nVous pouvez fermer cette fenêtre ou capturer une autre touche.")
     
     def save_key(self):
         """Save the selected key"""
