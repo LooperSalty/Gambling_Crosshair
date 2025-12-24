@@ -1,0 +1,3 @@
+@echo off 
+echo Lancement de l'installateur en mode administrateur... 
+powershell -Command "Start-Process 'C:\Users\ANAKIN\Desktop\Gambling_Crosshair\Crosshair_Gambler_Installer.exe' -Verb RunAs" 

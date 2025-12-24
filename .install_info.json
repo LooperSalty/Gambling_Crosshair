@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "install_date": "1766574038.4087574",
+  "python_version": "3.10.0",
+  "dependencies": [
+    "pillow",
+    "pynput",
+    "pygame"
+  ]
+}
