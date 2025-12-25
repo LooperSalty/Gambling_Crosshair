@@ -14,9 +14,108 @@ from pathlib import Path
 import urllib.request
 import tempfile
 import threading
-import winshell
-from win32com.client import Dispatch
 import ctypes
+
+# Try to import Windows-specific libraries with error handling
+try:
+    import winshell
+    from win32com.client import Dispatch
+    WINDOWS_LIBS_AVAILABLE = True
+except ImportError as e:
+    WINDOWS_LIBS_AVAILABLE = False
+    MISSING_LIBS_ERROR = str(e)
+
+def check_dependencies():
+    """Vérifier si toutes les dépendances sont installées"""
+    if not WINDOWS_LIBS_AVAILABLE:
+        root = tk.Tk()
+        root.withdraw()  # Hide the main window
+        
+        response = messagebox.askyesno(
+            "Dépendances Manquantes",
+            "L'installateur nécessite des bibliothèques supplémentaires.\n\n"
+            "Bibliothèques manquantes:\n"
+            "• pywin32\n"
+            "• winshell\n\n"
+            "Voulez-vous les installer automatiquement?\n\n"
+            "(Cela prendra environ 30 secondes)",
+            icon='warning'
+        )
+        
+        if response:
+            # Install dependencies
+            progress_window = tk.Toplevel()
+            progress_window.title("Installation des dépendances")
+            progress_window.geometry("400x150")
+            progress_window.configure(bg="#1a1a1a")
+            progress_window.resizable(False, False)
+            
+            label = tk.Label(
+                progress_window,
+                text="Installation en cours...\nVeuillez patienter...",
+                font=("Arial", 12),
+                fg="#ffffff",
+                bg="#1a1a1a"
+            )
+            label.pack(pady=30)
+            
+            progress = ttk.Progressbar(progress_window, mode='indeterminate', length=300)
+            progress.pack(pady=10)
+            progress.start()
+            
+            progress_window.update()
+            
+            try:
+                # Install pywin32 and winshell
+                result = subprocess.run(
+                    [sys.executable, "-m", "pip", "install", "pywin32", "winshell", "--quiet"],
+                    capture_output=True,
+                    text=True
+                )
+                
+                if result.returncode == 0:
+                    progress.stop()
+                    messagebox.showinfo(
+                        "Installation Réussie",
+                        "Les dépendances ont été installées avec succès!\n\n"
+                        "Veuillez RELANCER l'installateur."
+                    )
+                    progress_window.destroy()
+                    root.destroy()
+                    sys.exit(0)
+                else:
+                    progress.stop()
+                    progress_window.destroy()
+                    messagebox.showerror(
+                        "Erreur d'Installation",
+                        f"Impossible d'installer les dépendances.\n\n"
+                        f"Erreur: {result.stderr}\n\n"
+                        f"Installez-les manuellement:\n"
+                        f"pip install pywin32 winshell"
+                    )
+                    root.destroy()
+                    sys.exit(1)
+            except Exception as e:
+                progress.stop()
+                progress_window.destroy()
+                messagebox.showerror(
+                    "Erreur",
+                    f"Une erreur s'est produite:\n{e}\n\n"
+                    f"Installez les dépendances manuellement:\n"
+                    f"pip install pywin32 winshell"
+                )
+                root.destroy()
+                sys.exit(1)
+        else:
+            messagebox.showinfo(
+                "Installation Annulée",
+                "L'installateur ne peut pas fonctionner sans ces dépendances.\n\n"
+                "Pour les installer manuellement, exécutez:\n"
+                "pip install pywin32 winshell\n\n"
+                "Ou utilisez le script 'setup_installer.bat'"
+            )
+            root.destroy()
+            sys.exit(1)
 
 def is_admin():
     """Vérifier si le script s'exécute avec les droits admin"""
@@ -762,6 +861,9 @@ class InstallerApp:
 
 
 if __name__ == "__main__":
+    # Vérifier les dépendances AVANT tout
+    check_dependencies()
+    
     # Vérifier les droits admin AVANT de créer l'interface
     if not is_admin():
         print("Demande des droits administrateur...")
