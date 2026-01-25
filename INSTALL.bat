@@ -7,13 +7,44 @@ echo  Crosshair Gambler Pro - Installation
 echo ========================================
 echo.
 
-REM Vérifier si Python est installé
-echo [1/4] Verification de Python...
+REM Vérifier si Python est installé (PATH, py launcher ou chemins communs)
+echo [1/4] Recherche de Python...
+
+REM 1. Tester PATH
 python --version >nul 2>&1
 if %errorlevel% equ 0 (
-    echo [OK] Python est deja installe
-    python --version
-    echo.
+    echo [OK] Python trouve dans le PATH
+    set PYTHON_CMD=python
+    goto :install_libs
+)
+
+REM 2. Tester py launcher
+py --version >nul 2>&1
+if %errorlevel% equ 0 (
+    echo [OK] Python trouve via py launcher
+    set PYTHON_CMD=py
+    goto :install_libs
+)
+
+REM 3. Tester chemins communs
+if exist "%LOCALAPPDATA%\Programs\Python\Python313\python.exe" (
+    echo [OK] Python trouve dans AppData (v3.13)
+    set PYTHON_CMD="%LOCALAPPDATA%\Programs\Python\Python313\python.exe"
+    goto :install_libs
+)
+if exist "%LOCALAPPDATA%\Programs\Python\Python311\python.exe" (
+    echo [OK] Python trouve dans AppData (v3.11)
+    set PYTHON_CMD="%LOCALAPPDATA%\Programs\Python\Python311\python.exe"
+    goto :install_libs
+)
+if exist "%LOCALAPPDATA%\Programs\Python\Python310\python.exe" (
+    echo [OK] Python trouve dans AppData (v3.10)
+    set PYTHON_CMD="%LOCALAPPDATA%\Programs\Python\Python310\python.exe"
+    goto :install_libs
+)
+if exist "%LOCALAPPDATA%\Programs\Python\Python39\python.exe" (
+    echo [OK] Python trouve dans AppData (v3.9)
+    set PYTHON_CMD="%LOCALAPPDATA%\Programs\Python\Python39\python.exe"
     goto :install_libs
 )
 
@@ -93,8 +124,9 @@ echo.
 
 :install_libs
 REM Mise à jour de pip
+echo.
 echo [3/4] Mise a jour de pip...
-python -m pip install --upgrade pip --quiet
+%PYTHON_CMD% -m pip install --upgrade pip --quiet
 echo [OK] pip mis a jour
 echo.
 
@@ -102,7 +134,7 @@ REM Installation des bibliothèques requises
 echo [4/4] Installation des bibliotheques requises...
 echo.
 echo Installation de Pillow (traitement d'images)...
-python -m pip install pillow --quiet
+%PYTHON_CMD% -m pip install pillow --quiet
 if %errorlevel% neq 0 (
     echo [ERREUR] Echec de l'installation de Pillow
     pause
@@ -112,7 +144,7 @@ echo [OK] Pillow installe
 echo.
 
 echo Installation de pynput (controle clavier/souris)...
-python -m pip install pynput --quiet
+%PYTHON_CMD% -m pip install pynput --quiet
 if %errorlevel% neq 0 (
     echo [ERREUR] Echec de l'installation de pynput
     pause
@@ -122,7 +154,7 @@ echo [OK] pynput installe
 echo.
 
 echo Installation de pygame (son)...
-python -m pip install pygame --quiet
+%PYTHON_CMD% -m pip install pygame --quiet
 if %errorlevel% neq 0 (
     echo [ERREUR] Echec de l'installation de pygame
     pause

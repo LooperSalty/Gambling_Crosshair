@@ -163,22 +163,31 @@ class CrosshairOverlay:
             image_path = props.get("ImagePath")
             if image_path:
                 try:
-                    img = Image.open(image_path)
+                    # Try original path first
+                    if not os.path.exists(image_path):
+                        # Try in crosshair_images folder
+                        basename = os.path.basename(image_path)
+                        local_path = os.path.join("crosshair_images", basename)
+                        if os.path.exists(local_path):
+                            image_path = local_path
                     
-                    # Check if it's an animated GIF
-                    if hasattr(img, 'is_animated') and img.is_animated:
-                        # Extract all frames
-                        self._animate_gif(cx, cy, image_path)
-                        return
-                    else:
-                        # Static image (PNG or single-frame GIF)
-                        # Resize to fit in overlay
-                        img.thumbnail((150, 150), Image.Resampling.LANCZOS)
-                        photo = ImageTk.PhotoImage(img)
-                        self.canvas.create_image(cx, cy, image=photo)
-                        # Keep reference to prevent garbage collection
-                        self.canvas.image = photo
-                        return
+                    if os.path.exists(image_path):
+                        img = Image.open(image_path)
+                        
+                        # Check if it's an animated GIF
+                        if hasattr(img, 'is_animated') and img.is_animated:
+                            # Extract all frames
+                            self._animate_gif(cx, cy, image_path)
+                            return
+                        else:
+                            # Static image (PNG or single-frame GIF)
+                            # Resize to fit in overlay
+                            img.thumbnail((150, 150), Image.Resampling.LANCZOS)
+                            photo = ImageTk.PhotoImage(img)
+                            self.canvas.create_image(cx, cy, image=photo)
+                            # Keep reference to prevent garbage collection
+                            self.canvas.image = photo
+                            return
                 except Exception as e:
                     print(f"Error loading image: {e}")
                     pass
@@ -1330,14 +1339,38 @@ class CrosshairGambler:
         
         return saved_crosshairs
     
+    def _get_random_image_crosshair(self):
+        """Get a random crosshair from the images folder"""
+        images_dir = "crosshair_images"
+        if not os.path.exists(images_dir):
+            return None
+            
+        try:
+            images = [f for f in os.listdir(images_dir) if f.lower().endswith(('.png', '.gif', '.jpg', '.jpeg'))]
+            if not images:
+                return None
+                
+            selected_image = random.choice(images)
+            return {
+                "Type": "image",
+                "ImagePath": os.path.join(images_dir, selected_image)
+            }
+        except:
+            return None
+    
     def _generate_temp_crosshair_props(self):
         """Generate temporary crosshair properties for animation - includes saved crosshairs"""
         # Load saved crosshairs
         saved_crosshairs = self._load_saved_crosshairs()
         
-        # 60% chance to use saved crosshair if any exist, 40% generate new
-        if saved_crosshairs and random.random() < 0.6:
+        # 40% chance to use saved crosshair if any exist
+        if saved_crosshairs and random.random() < 0.4:
             return random.choice(saved_crosshairs)
+            
+        # 30% chance to use random image from folder
+        image_crosshair = self._get_random_image_crosshair()
+        if image_crosshair and random.random() < 0.5:  # 0.5 of remaining 0.6 = 0.3
+            return image_crosshair
         
         # Generate random crosshair
         styles = ["classic", "cross", "dot", "circle", "square", "T-shape", "plus"]
@@ -1379,32 +1412,43 @@ class CrosshairGambler:
         # Load saved crosshairs
         saved_crosshairs = self._load_saved_crosshairs()
         
-        # 60% chance to use saved crosshair if any exist, 40% generate new
-        if saved_crosshairs and random.random() < 0.6:
+        # 40% chance to use saved crosshair if any exist
+        if saved_crosshairs and random.random() < 0.4:
             self.crosshair_props = random.choice(saved_crosshairs)
+        # 30% chance to use random image from folder
+        elif random.random() < 0.5: # 0.5 of remaining probability space approx
+             image_crosshair = self._get_random_image_crosshair()
+             if image_crosshair:
+                 self.crosshair_props = image_crosshair
+             else:
+                 # Fallback to generated if no images
+                 self._generate_geometric_crosshair()
         else:
-            # Generate random crosshair
-            styles = ["classic", "cross", "dot", "circle", "square", "T-shape", "plus"]
-            colors = ["#00ff00", "#ff0000", "#00ffff", "#ffff00", "#ff00ff", "#ffffff", "#ff6600"]
-            
-            style = random.choice(styles)
-            color = random.choice(colors)
-            thickness = random.randint(1, 8)
-            length = random.randint(5, 40)
-            gap = random.randint(0, 20)
-            outline = random.randint(0, 3)
-            dot_size = random.randint(1, 8)
-            
-            self.crosshair_props = {
-                "Type": "generated",
-                "Style": style,
-                "Couleur": color,
-                "Épaisseur": thickness,
-                "Longueur": length,
-                "Gap": gap,
-                "Contour": outline,
-                "Taille point": dot_size
-            }
+             self._generate_geometric_crosshair()
+
+    def _generate_geometric_crosshair(self):
+        """Generate a random geometric crosshair"""
+        styles = ["classic", "cross", "dot", "circle", "square", "T-shape", "plus"]
+        colors = ["#00ff00", "#ff0000", "#00ffff", "#ffff00", "#ff00ff", "#ffffff", "#ff6600"]
+        
+        style = random.choice(styles)
+        color = random.choice(colors)
+        thickness = random.randint(1, 8)
+        length = random.randint(5, 40)
+        gap = random.randint(0, 20)
+        outline = random.randint(0, 3)
+        dot_size = random.randint(1, 8)
+        
+        self.crosshair_props = {
+            "Type": "generated",
+            "Style": style,
+            "Couleur": color,
+            "Épaisseur": thickness,
+            "Longueur": length,
+            "Gap": gap,
+            "Contour": outline,
+            "Taille point": dot_size
+        }
         
         self.redraw_crosshair()
         
@@ -1423,13 +1467,22 @@ class CrosshairGambler:
             image_path = self.crosshair_props.get("ImagePath")
             if image_path:
                 try:
-                    img = Image.open(image_path)
-                    img.thumbnail((300, 300), Image.Resampling.LANCZOS)
-                    photo = ImageTk.PhotoImage(img)
-                    self.canvas.create_image(200, 200, image=photo)
-                    self.canvas.image = photo  # Keep reference
-                    self.update_info()
-                    return
+                    # Try original path first
+                    if not os.path.exists(image_path):
+                        # Try in crosshair_images folder
+                        basename = os.path.basename(image_path)
+                        local_path = os.path.join("crosshair_images", basename)
+                        if os.path.exists(local_path):
+                            image_path = local_path
+                            
+                    if os.path.exists(image_path):
+                        img = Image.open(image_path)
+                        img.thumbnail((300, 300), Image.Resampling.LANCZOS)
+                        photo = ImageTk.PhotoImage(img)
+                        self.canvas.create_image(200, 200, image=photo)
+                        self.canvas.image = photo  # Keep reference
+                        self.update_info()
+                        return
                 except Exception as e:
                     print(f"Error loading image: {e}")
         
